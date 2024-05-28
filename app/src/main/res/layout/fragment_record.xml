@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="Seoul, Korea"
-            android:textSize="20sp" />
+            android:textSize="2sp" />
     </LinearLayout>
 
     <ScrollView
@@ -157,9 +157,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Splites"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 />
 
             <ListView
@@ -172,14 +172,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Map"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                android:layout_marginTop="16dp" />
+                android:layout_marginTop="20dp" />
 
             <ImageView
                 android:id="@+id/Map"
                 android:layout_width="match_parent"
-                android:layout_height="134dp"
+                android:layout_height="140dp"
                 android:scaleType="centerCrop" />
 
             <TextView
