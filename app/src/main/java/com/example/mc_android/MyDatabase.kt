@@ -14,7 +14,7 @@ class MyDatabase
             const val date = "date"
             const val startTime = "start_time"
             const val endTime = "end_time"
-            const val time = "album"
+            const val time = "time"
         }
     }
     class MyDbHelper
