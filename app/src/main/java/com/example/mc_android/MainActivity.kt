@@ -8,13 +8,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.example.mc_android.com.example.mc_android.MainFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
+    private var backPressedTime: Long = 0 // 뒤로 가기 버튼이 눌린 시간을 기록할 변수
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -51,5 +54,17 @@ class MainActivity : AppCompatActivity() {
             }
         }.attach()
 
+    }
+
+    override fun onBackPressed() {
+        // 현재 시간에서 마지막으로 뒤로가기 버튼을 누른 시간을 빼서 2초가 넘었는지 확인
+        if (backPressedTime + 2000 > System.currentTimeMillis()) {
+            super.onBackPressed()
+            return
+        } else {
+            // 2초가 넘지 않았다면 토스트 메시지로 한 번 더 누르면 종료된다고 알림
+            Toast.makeText(this, "한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+        }
+        backPressedTime = System.currentTimeMillis()
     }
 }
