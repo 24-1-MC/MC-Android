@@ -15,6 +15,9 @@ class MyDatabase
             const val startTime = "start_time"
             const val endTime = "end_time"
             const val time = "time"
+            const val distance = "distance"
+            const val location = "location"
+            const val route = "route"
         }
     }
     class MyDbHelper
@@ -25,7 +28,10 @@ class MyDatabase
                 "${MyDBContract.MyEntry.date} TEXT," +
                 "${MyDBContract.MyEntry.startTime} TEXT," +
                 "${MyDBContract.MyEntry.endTime} TEXT," +
-                "${MyDBContract.MyEntry.time} TEXT)"
+                "${MyDBContract.MyEntry.time} TEXT," +
+                "${MyDBContract.MyEntry.distance} REAL," +
+                "${MyDBContract.MyEntry.location} TEXT," +
+                "${MyDBContract.MyEntry.route} TEXT)"
         val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS ${MyDBContract.MyEntry.TABLE_NAME}"
         override fun onCreate (db: SQLiteDatabase) {
             db.execSQL(SQL_CREATE_ENTRIES)
@@ -55,7 +61,10 @@ class MyDatabase
                         cursor.getString(1),
                         cursor.getString(2),
                         cursor.getString(3),
-                        cursor.getString(4)
+                        cursor.getString(4),
+                        cursor.getDouble(5),
+                        cursor.getString(6),
+                        cursor.getString(7)
                     ))
                 }
             }
