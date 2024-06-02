@@ -8,6 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:orientation="vertical">
         <TextView
             android:id="@+id/Date"
@@ -51,150 +52,145 @@
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
+    <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
+        android:layout_marginHorizontal="16dp"
+        android:background="@drawable/border_table">
 
-        <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/border_table">
+        <!-- 첫 번째 행 -->
+        <TableRow
+            >
+            <TextView
+                android:text="Time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:textSize="15sp"
+                android:background="@drawable/border_table_cell"
+                android:gravity="center"
+                android:layout_weight="1"/>
+            <TextView
+                android:text="Distance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:textSize="15sp"
+                android:background="@drawable/border_table_cell"
+                android:gravity="center"
+                android:layout_weight="1"/>
+        </TableRow>
 
-            <!-- 첫 번째 행 -->
-            <TableRow>
-                <TextView
-                    android:text="Time"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:padding="3dp"
-                    android:textSize="15sp"
-                    android:background="@drawable/border_table_cell"
-                    android:gravity="center"
-                    android:layout_weight="1"/>
-                <TextView
-                    android:text="Distance"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:padding="3dp"
-                    android:textSize="15sp"
-                    android:background="@drawable/border_table_cell"
-                    android:gravity="center"
-                    android:layout_weight="1"/>
-            </TableRow>
+        <!-- 두 번째 행 -->
+        <TableRow>
+            <TextView
+                android:text="1h"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="32sp"
+                android:background="@drawable/border_table_cell"
+                android:gravity="center"
+                android:layout_weight="1"/>
+            <TextView
+                android:text="5km"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="32sp"
+                android:background="@drawable/border_table_cell"
+                android:gravity="center"
+                android:layout_weight="1"/>
+        </TableRow>
 
-            <!-- 두 번째 행 -->
-            <TableRow>
-                <TextView
-                    android:text="1h"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:background="@drawable/border_table_cell"
-                    android:gravity="center"
-                    android:layout_weight="1"/>
-                <TextView
-                    android:text="5km"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:background="@drawable/border_table_cell"
-                    android:gravity="center"
-                    android:layout_weight="1"/>
-            </TableRow>
+        <!-- 세 번째 행 -->
+        <TableRow>
+            <TextView
+                android:text="Elevation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:textSize="15sp"
+                android:background="@drawable/border_table_cell"
+                android:gravity="center"
+                android:layout_weight="1"/>
+            <TextView
+                android:text="Pace"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:textSize="15sp"
+                android:background="@drawable/border_table_cell"
+                android:gravity="center"
+                android:layout_weight="1"/>
+        </TableRow>
 
-            <!-- 세 번째 행 -->
-            <TableRow>
-                <TextView
-                    android:text="Elevation"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:padding="3dp"
-                    android:textSize="15sp"
-                    android:background="@drawable/border_table_cell"
-                    android:gravity="center"
-                    android:layout_weight="1"/>
-                <TextView
-                    android:text="Pace"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:padding="3dp"
-                    android:textSize="15sp"
-                    android:background="@drawable/border_table_cell"
-                    android:gravity="center"
-                    android:layout_weight="1"/>
-            </TableRow>
+        <!-- 네 번째 행 -->
+        <TableRow>
+            <TextView
+                android:text="100m"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="32sp"
+                android:background="@drawable/border_table_cell"
+                android:gravity="center"
+                android:layout_weight="1"/>
+            <TextView
+                android:text="6:00/km"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="32sp"
+                android:background="@drawable/border_table_cell"
+                android:gravity="center"
+                android:layout_weight="1"/>
+        </TableRow>
 
-            <!-- 네 번째 행 -->
-            <TableRow>
-                <TextView
-                    android:text="100m"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:background="@drawable/border_table_cell"
-                    android:gravity="center"
-                    android:layout_weight="1"/>
-                <TextView
-                    android:text="6:00/km"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:background="@drawable/border_table_cell"
-                    android:gravity="center"
-                    android:layout_weight="1"/>
-            </TableRow>
+        <!-- 다섯 번째 행 -->
+        <TableRow>
+            <TextView
+                android:text="Activity Calories"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:textSize="15sp"
+                android:background="@drawable/border_table_cell"
+                android:gravity="center"
+                android:layout_weight="1"/>
+            <TextView
+                android:text="Total Calories"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:textSize="15sp"
+                android:background="@drawable/border_table_cell"
+                android:gravity="center"
+                android:layout_weight="1"/>
+        </TableRow>
 
-            <!-- 다섯 번째 행 -->
-            <TableRow>
-                <TextView
-                    android:text="Activity Calories"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:padding="3dp"
-                    android:textSize="15sp"
-                    android:background="@drawable/border_table_cell"
-                    android:gravity="center"
-                    android:layout_weight="1"/>
-                <TextView
-                    android:text="Total Calories"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:padding="3dp"
-                    android:textSize="15sp"
-                    android:background="@drawable/border_table_cell"
-                    android:gravity="center"
-                    android:layout_weight="1"/>
-            </TableRow>
+        <!-- 여섯 번째 행 -->
+        <TableRow>
+            <TextView
+                android:text="300 kcal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="32sp"
+                android:background="@drawable/border_table_cell"
+                android:gravity="center"
+                android:layout_weight="1"/>
+            <TextView
+                android:text="500 kcal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="32sp"
+                android:background="@drawable/border_table_cell"
+                android:gravity="center"
+                android:layout_weight="1"/>
+        </TableRow>
 
-            <!-- 여섯 번째 행 -->
-            <TableRow>
-                <TextView
-                    android:text="300 kcal"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:background="@drawable/border_table_cell"
-                    android:gravity="center"
-                    android:layout_weight="1"/>
-                <TextView
-                    android:text="500 kcal"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:background="@drawable/border_table_cell"
-                    android:gravity="center"
-                    android:layout_weight="1"/>
-            </TableRow>
-
-        </TableLayout>
-
-    </LinearLayout>
+    </TableLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:orientation="vertical">
         <TextView
             android:layout_width="wrap_content"
@@ -202,8 +198,7 @@
             android:text="Splites"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginTop="20dp"
-            />
+            android:layout_marginTop="20dp"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewRecord"
             android:layout_width="match_parent"
@@ -214,8 +209,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:orientation="vertical">
-        <TextView
+        <Button
+            android:id="@+id/debug_map"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Map"
