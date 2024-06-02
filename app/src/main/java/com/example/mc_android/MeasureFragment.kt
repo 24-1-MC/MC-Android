@@ -31,6 +31,7 @@ class MeasureFragment : Fragment() {
     private var isRunning = false
     private var isRecording = false
     private var time = 0L
+    private var locationTick = 0
     private val locationRequest = LocationRequest.create().apply {
         interval = 10000 // 측정 단위 = 10sec
         // fastestInterval = 5000
@@ -59,16 +60,20 @@ class MeasureFragment : Fragment() {
                     previousLocation = location
                 }
                 tick = SystemClock.elapsedRealtime() - binding.timer.base
-
+                locationTick++
                 // 평균 페이스 출력
-                if(totalDistance != 0.0f)
-                    averagePace = tick / totalDistance
-                binding.paceView.text = String.format("%d'%02d''", (averagePace/60).toInt(), (averagePace%60).toInt())
+                if(locationTick == 8) {
+                    if(totalDistance != 0.0f)
+                        averagePace = tick / totalDistance
+                    binding.paceView.text = String.format("%d'%02d''", (averagePace/60).toInt(), (averagePace%60).toInt())
+                    locationTick = 0
+                }
 
                 // 누적 거리 출력
                 binding.distanceView.text = String.format("%.2f", totalDistance / 1000)
 
                 Log.d("DEBUG", "${locationResult.locations}")
+
             }
         }
 
