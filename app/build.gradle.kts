@@ -40,6 +40,7 @@ android {
 
 dependencies {
 
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("org.osmdroid:osmdroid-android:6.1.10")
     implementation("com.google.android.gms:play-services-location:21.3.0")
     implementation(libs.androidx.core.ktx)
