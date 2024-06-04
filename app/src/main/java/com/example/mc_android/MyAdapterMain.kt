@@ -7,18 +7,20 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mc_android.databinding.ListItemMainBinding
 
-class MyAdapterMain(private val itemList: List<String>, private val itemClickListener: OnItemClickListener) :
+class MyAdapterMain(val itemList: MutableList<String>, private val itemClickListener: OnItemClickListener) :
     RecyclerView.Adapter<MyAdapterMain.ViewHolder>() {
 
     interface OnItemClickListener {
         fun onItemClick(position: Int)
+        fun onItemLongClick(position: Int)
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnLongClickListener {
         val itemText: TextView = itemView.findViewById(R.id.item_text)
 
         init {
             itemView.setOnClickListener(this)
+            itemView.setOnLongClickListener(this)
         }
 
         override fun onClick(v: View?) {
@@ -26,6 +28,14 @@ class MyAdapterMain(private val itemList: List<String>, private val itemClickLis
             if (position != RecyclerView.NO_POSITION) {
                 itemClickListener.onItemClick(position)
             }
+        }
+
+        override fun onLongClick(v: View?): Boolean {
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                itemClickListener.onItemLongClick(position)
+            }
+            return true
         }
     }
 
@@ -42,4 +52,3 @@ class MyAdapterMain(private val itemList: List<String>, private val itemClickLis
         return itemList.size
     }
 }
-
