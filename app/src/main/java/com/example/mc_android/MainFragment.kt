@@ -1,9 +1,9 @@
 package com.example.mc_android
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -13,8 +13,6 @@ import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.DayViewFacade
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
-import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
-
 
 class MainFragment : Fragment(), MyAdapterMain.OnItemClickListener {
 
@@ -35,11 +33,14 @@ class MainFragment : Fragment(), MyAdapterMain.OnItemClickListener {
         return binding.root
     }
 
+    private var adapter: MyAdapterMain? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
-        binding.recyclerView.adapter = MyAdapterMain(getSampleData(), this)
+        adapter = MyAdapterMain(getSampleData().toMutableList(), this)
+        binding.recyclerView.adapter = adapter
 
         setupCalendarView()
     }
@@ -68,11 +69,22 @@ class MainFragment : Fragment(), MyAdapterMain.OnItemClickListener {
         })
     }
 
-
-
     override fun onItemClick(position: Int) {
         val intent = Intent(requireContext(), RecordActivity::class.java)
         startActivity(intent)
+    }
+
+    override fun onItemLongClick(position: Int) {
+        // AlertDialog를 사용하여 삭제 여부 확인
+        AlertDialog.Builder(requireContext())
+            .setTitle("삭제 확인")
+            .setMessage("이 기록을을 삭제하시겠습니까?")
+            .setPositiveButton("예") { dialog, which ->
+                adapter?.itemList?.removeAt(position)
+                adapter?.notifyItemRemoved(position)
+            }
+            .setNegativeButton("아니오", null)
+            .show()
     }
 
     override fun onDestroyView() {
@@ -81,6 +93,6 @@ class MainFragment : Fragment(), MyAdapterMain.OnItemClickListener {
     }
 
     private fun getSampleData(): List<String> {
-        return listOf("Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6", "Item 7", "Item 8", "Item 9", "Item 10")
+        return listOf("Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6", "Item 7", "Item 8", "Item 9", "Item 10", "Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6", "Item 7", "Item 8", "Item 9", "Item 10")
     }
 }

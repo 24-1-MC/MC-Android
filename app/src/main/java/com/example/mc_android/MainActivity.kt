@@ -29,14 +29,14 @@ class MainActivity : AppCompatActivity() {
         val tabLayout: TabLayout = findViewById(R.id.tabLayout)
 
         val adapter = object : FragmentStateAdapter(this) {
-            override fun getItemCount(): Int = 4
+            override fun getItemCount(): Int = 3
 
             override fun createFragment(position: Int): Fragment {
                 return when (position) {
                     0 -> MainFragment()
-                    1 -> RecordFragment()
-                    2 -> MeasureFragment()
-                    3 -> ChatbotFragment()
+//                    1 -> RecordFragment()
+                    1 -> MeasureFragment()
+                    2 -> ChatbotFragment()
                     else -> MainFragment()
                 }
             }
@@ -47,9 +47,9 @@ class MainActivity : AppCompatActivity() {
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = when (position) {
                 0 -> "Main"
-                1 -> "Record"
-                2 -> "Measure"
-                3 -> "Chatbot"
+//                1 -> "Record"
+                1 -> "Measure"
+                2 -> "Chatbot"
                 else -> "Main"
             }
         }.attach()
