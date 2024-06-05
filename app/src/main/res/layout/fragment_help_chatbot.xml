@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_centerInParent="true"
+        android:elevation="4dp">
+
+        <ImageView
+            android:id="@+id/close_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_close"
+            android:layout_gravity="end"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="16dp"
+            android:padding="8dp"
+            android:text="
+안녕하세요! 여러분의 러닝을 도와줄 ChatBot입니다. \n
+저는 러닝 및 운동에 관한 질문에만 답변할 수 있습니다. 이와 관련 없는 질문에는 답변이 제한됩니다."
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/bottom_right_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="120dp"
+        android:text="질문을 입력하고 '전송'버튼을 누르세요"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
+</FrameLayout>
