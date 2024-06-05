@@ -12,12 +12,14 @@ private val key = "754918bb8d09858d91d5100163aa9c92"
 
 fun getWeather(latitude: Double, longitude: Double): WeatherInfo? {
     val client = OkHttpClient()
+    // query
     val url = "https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$key&units=metric"
 
     val request = Request.Builder()
         .url(url)
         .build()
 
+    // query 전송
     client.newCall(request).execute().use { response ->
         if (!response.isSuccessful) return null
 
