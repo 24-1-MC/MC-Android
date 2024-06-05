@@ -5,7 +5,7 @@
     android:width="64dp">
       
     <path
-        android:fillColor="#6750A4"
+        android:fillColor="@color/material_purple"
         android:pathData="M24,0L24,0A24,24 0,0 1,48 24L48,24A24,24 0,0 1,24 48L24,48A24,24 0,0 1,0 24L0,24A24,24 0,0 1,24 0z"/>
     <path
         android:fillColor="#ffffff"

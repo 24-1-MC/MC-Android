@@ -30,6 +30,7 @@ class RecordFragment : Fragment() {
         binding.recyclerViewRecord.adapter = MyAdapterRecord(itemList)
         binding.debugMap.setOnClickListener {
             val intent: Intent = Intent(requireContext(), MapView::class.java)
+//                intent.putExtra("fileName", 파일이름:String)
             startActivity(intent)
         }
     }
