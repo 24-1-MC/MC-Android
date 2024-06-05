@@ -16,6 +16,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.mc_android.databinding.FragmentMeasureBinding
+import com.example.mc_android.services.GpxWriter
 import com.example.mc_android.services.WeatherInfo
 import com.example.mc_android.services.getWeather
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -42,6 +43,7 @@ class MeasureFragment : Fragment() {
     private var time = 0L
     private var tick = 0L
     private var locationTick = 0
+    private var gpx: GpxWriter? = null
     private val locationRequest = LocationRequest.create().apply {
         interval = 10000 // 측정 단위 = 10sec
         // fastestInterval = 5000
@@ -91,6 +93,9 @@ class MeasureFragment : Fragment() {
                             totalElevation += altitude
                     }
 
+                    // gpx 기록 갱신
+                    gpx!!.append(location.latitude, location.longitude, location.altitude)
+
                     previousLocation = location
                     previousAltitude = location.altitude
                 }
@@ -122,6 +127,8 @@ class MeasureFragment : Fragment() {
             if(!isRunning) {
                 fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
                 if(!isRecording) {
+                    // 현재 시간.gpx 파일 기록 시작
+                    gpx = GpxWriter(requireContext()).apply { initialize() }
                     binding.timer.base = SystemClock.elapsedRealtime()
                 } else {
                     binding.timer.base += (SystemClock.elapsedRealtime() - time)
@@ -149,6 +156,8 @@ class MeasureFragment : Fragment() {
                 AlertDialog.Builder(requireContext())
                     .setTitle("기록 완료")
                     .setPositiveButton("저장") { dialog, which ->
+                        // gpx 기록 종료
+                        gpx!!.finalizeGpx()
 
                         // 저장 코드를 구현해야함
                         // 시간값: Int
@@ -161,7 +170,11 @@ class MeasureFragment : Fragment() {
                         Log.d("DEBUG", "상승 고도(m) = $totalElevation")
 
                         // 평균 페이스: Double
-                        Log.d("DEBUG", "평균 페이스(sec) = ${(tick/totalDistance).toDouble()}")
+                        var pace: Float
+                        if(totalDistance == 0f) pace = 0f // infinity 예외처리
+                        else pace = tick/totalDistance
+                        if(averagePace > 2400) pace = 0f // pace가 너무 길면 0으로 표시
+                        Log.d("DEBUG", "평균 페이스(sec) = ${pace.toDouble()}")
 
                         // 소모칼로리: Int
                         Log.d("DEBUG", "소모 칼로리 = ")
@@ -180,6 +193,9 @@ class MeasureFragment : Fragment() {
 
                         // 습도: Int
                         Log.d("DEBUG", "습도 = ${weather!!.humidity}")
+
+                        // gpx 파일 이름
+                        Log.d("DEBUG", "파일명 = ${gpx!!.getFileName()}")
 
 
 
