@@ -7,7 +7,7 @@ import java.io.FileWriter
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class GpxWriter(private val context: Context) {
+class GpxWriter(context: Context) {
     // 현재 시간 값을 파일 이름으로 사용
     private var currentTime = LocalDateTime.now()
     private val fileName = "${formatFileName(currentTime)}.gpx"
