@@ -18,23 +18,26 @@ class GpxWriter(private val context: Context) {
         writer.apply {
             append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
             append("<gpx version=\"1.1\" creator=\"made_by_jpark/한결/지수/성준\">\n")
-            append("<trk><name>OutdoorRunning</name><trkseg>\n")
+            append("<trk>\n")
+            append("  <name>OutdoorRunning</name>\n")
+            append("  <trkseg>\n")
         }
     }
 
     fun append(latitude: Double, longitude: Double, altitude: Double) {
         currentTime = LocalDateTime.now()
         writer.apply {
-            append("<trkpt lat=\"$latitude\" lon=\"$longitude\">\n")
-            append("<ele>$altitude</ele>\n")
-            append("<time>${formatTime(currentTime)}</time>\n")
-            append("</trkpt>\n")
+            append("    <trkpt lat=\"$latitude\" lon=\"$longitude\">\n")
+            append("      <ele>$altitude</ele>\n")
+            append("      <time>${formatTime(currentTime)}</time>\n")
+            append("    </trkpt>\n")
         }
     }
 
     fun finalizeGpx() {
         writer.apply {
-            append("</trkseg></trk>\n")
+            append("  </trkseg>\n")
+            append("</trk>\n")
             append("</gpx>\n")
             close()
         }
