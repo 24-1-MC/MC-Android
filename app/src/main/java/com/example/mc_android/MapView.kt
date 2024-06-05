@@ -3,10 +3,12 @@ package com.example.mc_android
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.mc_android.databinding.MapViewBinding
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.Polyline
 
 class MapView: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +33,9 @@ class MapView: AppCompatActivity() {
 //            startPoint = it[0]
 //            finishPoint = it[it.size-1]
 //        }
+
+
+
 
 
         // 명지대 마커 추가
@@ -79,12 +84,11 @@ class MapView: AppCompatActivity() {
         */
 
         /*
-        // 경로를 선으로 나타내기
-        val polyline = Polyline().apply {
-            for(i in points)
-                addPoint(i)
-            setColor(resources.getColor(R.color.purple_200))
-            width = 20f // 선 두께 설정
+         // 경로를 선으로 나타내기
+        val polyline = Polyline().apply { for(i in points) addPoint(i) }
+        val paint = polyline.outlinePaint.apply {
+            color = ContextCompat.getColor(applicationContext, R.color.material_purple)
+            strokeWidth = 20f // 선 두께 설정
         }
         map.overlayManager.add(polyline)
         */
