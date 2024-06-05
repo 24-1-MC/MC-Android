@@ -1,21 +1,23 @@
-package com.example.mc_android
+package com.example.mc_android.services
 
+import android.content.Context
 import java.io.BufferedWriter
 import java.io.File
+import java.io.FileWriter
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class GpxWriter {
+class GpxWriter(private val context: Context) {
     // 현재 시간 값을 파일 이름으로 사용
     private var currentTime = LocalDateTime.now()
     private val fileName = "${formatFileName(currentTime)}.gpx"
-    private val file = File(fileName).apply { createNewFile() }
-    private val writer = BufferedWriter(file.writer())
+    private val file = File(context.filesDir, fileName).apply { createNewFile() }
+    private val writer = BufferedWriter(FileWriter(file))
 
     fun initialize() {
         writer.apply {
             append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
-            append("<gpx version=\"1.1\" creator=\"MJU-MC-2024\">\n")
+            append("<gpx version=\"1.1\" creator=\"made_by_jpark/한결/지수/성준\">\n")
             append("<trk><name>OutdoorRunning</name><trkseg>\n")
         }
     }
@@ -36,6 +38,10 @@ class GpxWriter {
             append("</gpx>\n")
             close()
         }
+    }
+
+    fun getFileName(): String {
+        return fileName
     }
 
 
