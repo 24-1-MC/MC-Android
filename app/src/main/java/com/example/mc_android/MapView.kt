@@ -1,5 +1,6 @@
 package com.example.mc_android
 
+import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -88,6 +89,7 @@ class MapView: AppCompatActivity() {
         polyline.outlinePaint.apply {
             color = ContextCompat.getColor(applicationContext, R.color.material_purple)
             strokeWidth = 20f // 선 두께 설정
+            strokeCap = Paint.Cap.ROUND
         }
 
         // Map 초기화

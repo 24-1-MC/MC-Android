@@ -69,13 +69,12 @@ class MeasureFragment : Fragment() {
 
                 for (location in locationResult.locations) {
                     // Debug
-                    Log.d("DEBUG", "lat = ${location.latitude}")
-                    Log.d("DEBUG", "lon = ${location.longitude}")
-                    Log.d("DEBUG", "alt = ${location.altitude}")
+                    Log.d("DEBUG", "lat=${location.latitude} lon=${location.longitude} alt=${location.altitude}")
 
                     // 첫 위치, 날씨 기록
                     if(initLocation == null) initLocation = location
                     if(weather == null)
+                        // 백그라운드 스레드풀
                         CoroutineScope(Dispatchers.Default).launch {
                             weather = getWeather(location.latitude, location.longitude)
                         }
