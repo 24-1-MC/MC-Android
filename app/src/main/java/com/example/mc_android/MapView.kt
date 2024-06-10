@@ -58,14 +58,10 @@ class MapView: AppCompatActivity() {
 
             // 줌 레벨 설정
             val length = maxLongtitude - minLongtitude
-            if(length < 0.0025)
-                zoomLevel = 19.0
-            else if(length < 0.005)
-                zoomLevel = 18.0
-            else if(length < 0.01)
-                zoomLevel = 17.0
-            else
-                zoomLevel = 16.0
+            if(length < 0.0025) zoomLevel = 19.0
+            else if(length < 0.005) zoomLevel = 18.0
+            else if(length < 0.01) zoomLevel = 17.0
+            else zoomLevel = 16.0
         }
 
         // 시작 지점 마커
@@ -89,7 +85,7 @@ class MapView: AppCompatActivity() {
         polyline.outlinePaint.apply {
             color = ContextCompat.getColor(applicationContext, R.color.material_purple)
             strokeWidth = 20f // 선 두께 설정
-            strokeCap = Paint.Cap.ROUND
+            strokeCap = Paint.Cap.ROUND // 모서리 둥글게
         }
 
         // Map 초기화
@@ -101,55 +97,5 @@ class MapView: AppCompatActivity() {
             overlays.add(finishMarker)
             overlayManager.add(polyline)
         }
-
-
-
-
-//        // 명지대 마커 추가
-//        startPoint = GeoPoint(37.579881, 126.922745)
-//        // finishPoint = points[points.size-1]
-//        Log.d("DEBUG", "$startPoint")
-
-
-        /*
-        // GeoPoint배열 예제
-        val points = mutableListOf(
-            GeoPoint(37.554722, 126.970833), // 서울역
-            GeoPoint(37.552349, 126.967478), // 중간 지점 1
-            GeoPoint(37.550253, 126.972260), // 중간 지점 2
-            GeoPoint(37.547001, 126.972912), // 중간 지점 3
-            GeoPoint(37.529849, 126.964561)  // 용산역
-        )
-        */
-
-        /*
-         // 경로를 선으로 나타내기
-        val polyline = Polyline().apply { for(i in points) addPoint(i) }
-        val paint = polyline.outlinePaint.apply {
-            color = ContextCompat.getColor(applicationContext, R.color.material_purple)
-            strokeWidth = 20f // 선 두께 설정
-        }
-        map.overlayManager.add(polyline)
-        */
-
-        /*
-        // 시작지점 마커
-        val startMarker = Marker(binding.mapView).apply {
-            position = points[0]
-            setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
-            icon = getDrawable(R.drawable.ic_start_point) // 아이콘 설정
-            title = "Start point"
-        }
-        */
-
-        /*
-        // 종료 지점 마커
-        val finishMarker = Marker(binding.mapView).apply {
-            position = points[points.size-1]
-            setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
-            icon = getDrawable(R.drawable.ic_start_point) // 아이콘 설정
-            title = "Finish point"
-        }
-        */
     }
 }
