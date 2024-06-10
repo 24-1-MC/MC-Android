@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import com.example.mc_android.databinding.FragmentMeasureBinding
 import com.example.mc_android.services.GpxWriter
 import com.example.mc_android.services.WeatherInfo
+import com.example.mc_android.services.getCalories
 import com.example.mc_android.services.getWeather
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -176,10 +177,8 @@ class MeasureFragment : Fragment() {
                         Log.d("DEBUG", "평균 페이스(sec) = ${pace.toDouble()}")
 
                         // 소모칼로리: Int
-                        Log.d("DEBUG", "소모 칼로리 = ")
-
-                        // 총 소모 칼로리: Int
-                        Log.d("DEBUG", "총 소모 칼로리 = ")
+                        val cal = getCalories(totalDistance/1000, tick/3600000.0)
+                        Log.d("DEBUG", "소모 칼로리 = $cal")
 
                         // 측정 위치: String
                         Log.d("DEBUG", "측정 위치 = ")
@@ -195,11 +194,6 @@ class MeasureFragment : Fragment() {
 
                         // gpx 파일 이름
                         Log.d("DEBUG", "파일명 = ${gpx!!.getFileName()}")
-
-
-
-
-
 
                         Log.d("DEBUG", "saved")
                         
@@ -241,23 +235,4 @@ class MeasureFragment : Fragment() {
     override fun onResume() {
         super.onResume()
     }
-
-
-
-//    //칼로리 계산식
-//    private fun calculateCaloriesBurned(gpxData: GPXData, userData: UserData): Double {
-//        val durationHours = gpxData.duration / (1000 * 60 * 60).toDouble()
-//        val speed = gpxData.distance / (gpxData.duration / 1000.0) * 3.6 // km/h
-//
-//        // Simplified METS values based on speed
-//        val mets = when {
-//            speed < 4 -> 2.0
-//            speed < 6 -> 3.0
-//            speed < 8 -> 6.0
-//            else -> 8.0
-//        }
-//
-//        // Calories burned formula
-//        return mets * userData.weight * durationHours
-//    }
 }
