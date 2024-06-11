@@ -25,7 +25,7 @@ class MapView: AppCompatActivity() {
 //                gpxFile = GpxReader(applicationContext, it)
 //            }
 //        }
-        gpxFile = GpxReader(applicationContext, "20240605_124602.gpx")
+        gpxFile = GpxReader(applicationContext, "20240612_025554.gpx")
         var startPoint: GeoPoint
         var finishPoint: GeoPoint
         var maxLatitude: Double
@@ -93,9 +93,9 @@ class MapView: AppCompatActivity() {
             setMultiTouchControls(true)
             controller.setZoom(zoomLevel)
             controller.setCenter(center)
+            overlayManager.add(polyline)
             overlays.add(startMarker) // start 마커 생성
             overlays.add(finishMarker)
-            overlayManager.add(polyline)
         }
     }
 }
