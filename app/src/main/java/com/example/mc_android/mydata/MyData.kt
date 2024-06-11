@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class MyData(
-    @PrimaryKey(autoGenerate = true) val id: Int = 1,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val startAt: String,
     val endAt: String,
     val time: Int,

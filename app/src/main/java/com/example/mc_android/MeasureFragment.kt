@@ -28,6 +28,7 @@ import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -137,7 +138,7 @@ class MeasureFragment : Fragment() {
                     val startTime = Instant.now()
                     // 현재 시간.gpx 파일 기록 시작
                     startTimeIsoTimestamp = isoUtcTimestampFormatter.format(startTime)
-                    gpx = GpxWriter(requireContext(), startTimeIsoTimestamp).apply { initialize() }
+                    gpx = GpxWriter(requireContext()).apply { initialize() }
                     binding.timer.base = SystemClock.elapsedRealtime()
                 } else {
                     binding.timer.base += (SystemClock.elapsedRealtime() - time)
@@ -196,46 +197,46 @@ class MeasureFragment : Fragment() {
                         Log.d("DEBUG", "측정 위치 = ")
 
                         // 날씨: String
-                        Log.d("DEBUG", "날씨 = ${weather!!.icon}")
+                        Log.d("DEBUG", "날씨 = ${weather?.icon}")
 
                         // 온도: Int
-                        Log.d("DEBUG", "온도 = ${weather!!.temperature}")
+                        Log.d("DEBUG", "온도 = ${weather?.temperature}")
 
                         // 습도: Int
-                        Log.d("DEBUG", "습도 = ${weather!!.humidity}")
+                        Log.d("DEBUG", "습도 = ${weather?.humidity}")
 
                         // gpx 파일 이름
-                        Log.d("DEBUG", "파일명 = ${gpx!!.getFileName()}")
-
-
+                        Log.d("DEBUG", "파일명 = ${gpx?.getFileName()}")
 
                         val db = MyDataDaoDatabase.getDatabase(requireContext())
+                        val endTimeIsoUtcTimeStamp = isoUtcTimestampFormatter.format(endTime)
+
                         CoroutineScope(Dispatchers.IO).launch {
                             db!!.myDataDao().insert(MyData(
-                                1,
-                                startTimeIsoTimestamp,
-                                isoUtcTimestampFormatter.format(endTime),
-                                (tick/1000).toInt(),
-                                (totalDistance/1000).toDouble(),
-                                totalElevation,
-                                pace.toDouble(),
-                                weather!!.icon,
-                                weather!!.temperature,
-                                weather!!.humidity,
-                                gpx!!.getFileName()
+                                startAt = startTimeIsoTimestamp,
+                                endAt = endTimeIsoUtcTimeStamp,
+                                time = (tick/1000).toInt(),
+                                distance = (totalDistance/1000).toDouble(),
+                                totalElevation = totalElevation,
+                                avgFace = pace.toDouble(),
+                                weatherIcon = weather!!.icon,
+                                temperature = weather!!.temperature,
+                                humidity = weather!!.humidity,
+                                locationFileName = gpx!!.getFileName()
                             ))
-                            Log.d("DEBUG", "saved")
-
-                            binding.timer.base = SystemClock.elapsedRealtime()
-                            binding.action.text = "Start"
-                            binding.paceView.text = "0'00''"
-                            binding.distanceView.text = "0.00"
-                            binding.stop.visibility = View.INVISIBLE
-                            previousLocation = null
-                            totalDistance = 0f
-                            isRecording = false
-                            averagePace = 0.0f
-                            Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
+                            withContext(Dispatchers.Main) {
+                                Log.d("DEBUG", "saved")
+                                binding.timer.base = SystemClock.elapsedRealtime()
+                                binding.action.text = "Start"
+                                binding.paceView.text = "0'00''"
+                                binding.distanceView.text = "0.00"
+                                binding.stop.visibility = View.INVISIBLE
+                                previousLocation = null
+                                totalDistance = 0f
+                                isRecording = false
+                                averagePace = 0.0f
+                                Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
                     .setNegativeButton("삭제") { dialog, which ->

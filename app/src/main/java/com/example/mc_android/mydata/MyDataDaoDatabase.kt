@@ -9,8 +9,9 @@ import androidx.room.RoomDatabase
 abstract class MyDataDaoDatabase: RoomDatabase() {
     abstract fun myDataDao(): MyDataDao
     companion object{
+        @Volatile
         private var instance: MyDataDaoDatabase? =null
-        @Synchronized
+
         fun getDatabase (context: Context): MyDataDaoDatabase?{
             if(instance==null){
                 synchronized (MyDataDaoDatabase::class){
@@ -24,4 +25,4 @@ abstract class MyDataDaoDatabase: RoomDatabase() {
             return instance
         }
     }
-    }
+}

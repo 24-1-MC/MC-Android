@@ -1,18 +1,16 @@
 package com.example.mc_android.services
 
 import android.content.Context
-import android.content.Intent
 import java.io.BufferedWriter
 import java.io.File
 import java.io.FileWriter
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.Instant
 import java.time.ZoneId
 
-class GpxWriter(context: Context, startTimeIsoTimestamp: String) {
+class GpxWriter(context: Context) {
     // 현재 타임스탬프를 파일 이름으로 사용
-    private val fileName = "${startTimeIsoTimestamp}.gpx"
+    private val fileName = "${formatFileName()}.gpx"
     private val file = File(context.filesDir, fileName).apply { createNewFile() }
     private val writer = BufferedWriter(FileWriter(file))
 
@@ -50,6 +48,20 @@ class GpxWriter(context: Context, startTimeIsoTimestamp: String) {
 
     fun getFileName(): String {
         return fileName
+    }
+
+    private fun formatFileName(): String {
+        // 현재 시간의 Instant 객체 생성
+        val now = Instant.now()
+
+        // UTC 시간대의 ZonedDateTime으로 변환
+        val zdt = now.atZone(ZoneId.of("UTC"))
+
+        // 포맷터 생성
+        val formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
+
+        // 포맷팅된 문자열 생성
+        return zdt.format(formatter)
     }
 }
 
