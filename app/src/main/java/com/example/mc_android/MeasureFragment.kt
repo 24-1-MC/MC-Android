@@ -1,7 +1,6 @@
 package com.example.mc_android
 
 import android.Manifest
-import android.app.Activity
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -16,6 +15,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.mc_android.databinding.FragmentMeasureBinding
+import com.example.mc_android.mydata.MyData
+import com.example.mc_android.mydata.MyDataDaoDatabase
 import com.example.mc_android.services.GpxWriter
 import com.example.mc_android.services.WeatherInfo
 import com.example.mc_android.services.getWeather
@@ -27,7 +28,9 @@ import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.math.round
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 class MeasureFragment : Fragment() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -50,7 +53,11 @@ class MeasureFragment : Fragment() {
         priority = LocationRequest.PRIORITY_HIGH_ACCURACY
     }
 
-    override fun onCreateView(
+    private lateinit var startTimeIsoTimestamp: String
+    private val isoUtcTimestampFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+        .withZone(ZoneId.of("UTC"))
+
+        override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
@@ -127,8 +134,10 @@ class MeasureFragment : Fragment() {
             if(!isRunning) {
                 fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
                 if(!isRecording) {
+                    val startTime = Instant.now()
                     // 현재 시간.gpx 파일 기록 시작
-                    gpx = GpxWriter(requireContext()).apply { initialize() }
+                    startTimeIsoTimestamp = isoUtcTimestampFormatter.format(startTime)
+                    gpx = GpxWriter(requireContext(), startTimeIsoTimestamp).apply { initialize() }
                     binding.timer.base = SystemClock.elapsedRealtime()
                 } else {
                     binding.timer.base += (SystemClock.elapsedRealtime() - time)
@@ -153,6 +162,7 @@ class MeasureFragment : Fragment() {
 
         binding.stop.setOnClickListener {
             if(isRecording && !isRunning) {
+                val endTime = Instant.now()
                 AlertDialog.Builder(requireContext())
                     .setTitle("기록 완료")
                     .setPositiveButton("저장") { dialog, which ->
@@ -199,21 +209,34 @@ class MeasureFragment : Fragment() {
 
 
 
+                        val db = MyDataDaoDatabase.getDatabase(requireContext())
+                        CoroutineScope(Dispatchers.IO).launch {
+                            db!!.myDataDao().insert(MyData(
+                                1,
+                                startTimeIsoTimestamp,
+                                isoUtcTimestampFormatter.format(endTime),
+                                (tick/1000).toInt(),
+                                (totalDistance/1000).toDouble(),
+                                totalElevation,
+                                pace.toDouble(),
+                                weather!!.icon,
+                                weather!!.temperature,
+                                weather!!.humidity,
+                                gpx!!.getFileName()
+                            ))
+                            Log.d("DEBUG", "saved")
 
-
-
-                        Log.d("DEBUG", "saved")
-                        
-                        binding.timer.base = SystemClock.elapsedRealtime()
-                        binding.action.text = "Start"
-                        binding.paceView.text = "0'00''"
-                        binding.distanceView.text = "0.00"
-                        binding.stop.visibility = View.INVISIBLE
-                        previousLocation = null
-                        totalDistance = 0f
-                        isRecording = false
-                        averagePace = 0.0f
-                        Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
+                            binding.timer.base = SystemClock.elapsedRealtime()
+                            binding.action.text = "Start"
+                            binding.paceView.text = "0'00''"
+                            binding.distanceView.text = "0.00"
+                            binding.stop.visibility = View.INVISIBLE
+                            previousLocation = null
+                            totalDistance = 0f
+                            isRecording = false
+                            averagePace = 0.0f
+                            Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
+                        }
                     }
                     .setNegativeButton("삭제") { dialog, which ->
                         binding.timer.base = SystemClock.elapsedRealtime()
