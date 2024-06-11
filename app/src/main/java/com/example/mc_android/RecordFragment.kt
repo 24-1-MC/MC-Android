@@ -22,18 +22,18 @@ class RecordFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val itemList = listOf("Record 1", "Record 2", "Record 3", "Record 4", "Record 5") // 샘플 데이터
-        binding.recyclerViewRecord.layoutManager = LinearLayoutManager(context)
-        binding.recyclerViewRecord.adapter = MyAdapterRecord(itemList)
-        binding.debugMap.setOnClickListener {
-            val intent: Intent = Intent(requireContext(), MapView::class.java)
-//                intent.putExtra("fileName", 파일이름:String)
-            startActivity(intent)
-        }
-    }
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//
+//        val itemList = listOf("Record 1", "Record 2", "Record 3", "Record 4", "Record 5") // 샘플 데이터
+//        binding.recyclerViewRecord.layoutManager = LinearLayoutManager(context)
+//        binding.recyclerViewRecord.adapter = MyAdapterRecord(itemList)
+//        binding.debugMap.setOnClickListener {
+//            val intent: Intent = Intent(requireContext(), MapView::class.java)
+////                intent.putExtra("fileName", 파일이름:String)
+//            startActivity(intent)
+//        }
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()
