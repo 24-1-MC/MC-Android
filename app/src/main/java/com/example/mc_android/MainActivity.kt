@@ -1,7 +1,9 @@
 package com.example.mc_android
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -14,12 +16,24 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
+
     private var backPressedTime: Long = 0 // 뒤로 가기 버튼이 눌린 시간을 기록할 변수
+
+    override fun attachBaseContext(newBase: Context) {
+        val locale = Locale("ko")
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.setLocale(locale)
+        val context = newBase.createConfigurationContext(config)
+        super.attachBaseContext(context)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
 
         // 위치정보 권한 요청
