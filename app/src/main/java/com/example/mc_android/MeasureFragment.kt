@@ -77,7 +77,7 @@ class MeasureFragment : Fragment() {
                     if(weather == null)
                         // 백그라운드 스레드풀
                         CoroutineScope(Dispatchers.Default).launch {
-                            weather = getWeather(location.latitude, location.longitude)
+                            weather = getWeather(requireContext(), location.latitude, location.longitude)
                         }
 
                     // 누적 거리 계산
@@ -153,6 +153,20 @@ class MeasureFragment : Fragment() {
 
         binding.stop.setOnClickListener {
             if(isRecording && !isRunning) {
+                if(totalDistance < 10) {
+                    binding.timer.base = SystemClock.elapsedRealtime()
+                    binding.action.text = "Start"
+                    binding.paceView.text = "0'00''"
+                    binding.distanceView.text = "0.00"
+                    binding.stop.visibility = View.INVISIBLE
+                    previousLocation = null
+                    totalDistance = 0f
+                    isRecording = false
+                    averagePace = 0.0f
+                    Toast.makeText(context, "저장되지 않았습니다.", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
                 AlertDialog.Builder(requireContext())
                     .setTitle("기록 완료")
                     .setPositiveButton("저장") { dialog, which ->
@@ -184,13 +198,14 @@ class MeasureFragment : Fragment() {
                         Log.d("DEBUG", "측정 위치 = ")
 
                         // 날씨: String
-                        Log.d("DEBUG", "날씨 = ${weather!!.icon}")
+
+//                        Log.d("DEBUG", "날씨 = ${weather!!.icon}")
 
                         // 온도: Int
-                        Log.d("DEBUG", "온도 = ${weather!!.temperature}")
+//                        Log.d("DEBUG", "온도 = ${weather!!.temperature}")
 
                         // 습도: Int
-                        Log.d("DEBUG", "습도 = ${weather!!.humidity}")
+//                        Log.d("DEBUG", "습도 = ${weather!!.humidity}")
 
                         // gpx 파일 이름
                         Log.d("DEBUG", "파일명 = ${gpx!!.getFileName()}")
