@@ -18,7 +18,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="TIME"
+                android:text="시간"
                 android:textSize="18sp" />
             <Chronometer
                 android:id="@+id/timer"
@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="AVG PACE"
+                android:text="평균 페이스"
                 android:textSize="18sp" />
             <TextView
                 android:id="@+id/pace_view"
@@ -70,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="DISTANCE"
+                android:text="거리"
                 android:textSize="18sp" />
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -109,14 +109,14 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Start"
+                android:text="시작"
                 android:layout_marginBottom="10dp" />
             <Button
                 android:id="@+id/stop"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Finish"
+                android:text="종료"
                 android:visibility="invisible"/>
         </LinearLayout>
 

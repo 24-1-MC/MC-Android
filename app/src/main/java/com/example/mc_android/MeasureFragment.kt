@@ -146,7 +146,7 @@ class MeasureFragment : Fragment() {
                 binding.timer.start()
                 isRunning = true
                 isRecording = true
-                binding.action.text = "Pause"
+                binding.action.text = "멈춤"
                 binding.stop.visibility = View.INVISIBLE
                 Log.d("DEBUG", "started")
             } else {
@@ -155,7 +155,7 @@ class MeasureFragment : Fragment() {
                 time = SystemClock.elapsedRealtime()
                 tick = SystemClock.elapsedRealtime() - binding.timer.base
                 isRunning = false
-                binding.action.text = "Resume"
+                binding.action.text = "재시작"
                 binding.stop.visibility = View.VISIBLE
                 Log.d("DEBUG", "paused")
             }
@@ -224,6 +224,7 @@ class MeasureFragment : Fragment() {
                                 humidity = weather!!.humidity,
                                 locationFileName = gpx!!.getFileName()
                             ))
+
                             withContext(Dispatchers.Main) {
                                 Log.d("DEBUG", "saved")
                                 binding.timer.base = SystemClock.elapsedRealtime()
@@ -241,7 +242,7 @@ class MeasureFragment : Fragment() {
                     }
                     .setNegativeButton("삭제") { dialog, which ->
                         binding.timer.base = SystemClock.elapsedRealtime()
-                        binding.action.text = "Start"
+                        binding.action.text = "시작"
                         binding.paceView.text = "0'00''"
                         binding.distanceView.text = "0.00"
                         binding.stop.visibility = View.INVISIBLE
@@ -249,7 +250,7 @@ class MeasureFragment : Fragment() {
                         totalDistance = 0f
                         isRecording = false
                         averagePace = 0.0f
-                        Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "삭제 완료", Toast.LENGTH_SHORT).show()
                     }
                     .create()
                     .show()
