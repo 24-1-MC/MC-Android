@@ -19,6 +19,7 @@ import com.example.mc_android.mydata.MyData
 import com.example.mc_android.mydata.MyDataDaoDatabase
 import com.example.mc_android.services.GpxWriter
 import com.example.mc_android.services.WeatherInfo
+import com.example.mc_android.services.getCalories
 import com.example.mc_android.services.getWeather
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -77,15 +78,14 @@ class MeasureFragment : Fragment() {
 
                 for (location in locationResult.locations) {
                     // Debug
-                    Log.d("DEBUG", "lat = ${location.latitude}")
-                    Log.d("DEBUG", "lon = ${location.longitude}")
-                    Log.d("DEBUG", "alt = ${location.altitude}")
+                    Log.d("DEBUG", "lat=${location.latitude} lon=${location.longitude} alt=${location.altitude}")
 
                     // 첫 위치, 날씨 기록
                     if(initLocation == null) initLocation = location
                     if(weather == null)
+                        // 백그라운드 스레드풀
                         CoroutineScope(Dispatchers.Default).launch {
-                            weather = getWeather(location.latitude, location.longitude)
+                            weather = getWeather(requireContext(), location.latitude, location.longitude)
                         }
 
                     // 누적 거리 계산
@@ -163,7 +163,24 @@ class MeasureFragment : Fragment() {
 
         binding.stop.setOnClickListener {
             if(isRecording && !isRunning) {
+
+                if(totalDistance < 10) {
+                    binding.timer.base = SystemClock.elapsedRealtime()
+                    binding.action.text = "Start"
+                    binding.paceView.text = "0'00''"
+                    binding.distanceView.text = "0.00"
+                    binding.stop.visibility = View.INVISIBLE
+                    previousLocation = null
+                    totalDistance = 0f
+                    isRecording = false
+                    averagePace = 0.0f
+                    Toast.makeText(context, "저장되지 않았습니다.", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+
                 val endTime = Instant.now()
+
                 AlertDialog.Builder(requireContext())
                     .setTitle("기록 완료")
                     .setPositiveButton("저장") { dialog, which ->
@@ -188,15 +205,39 @@ class MeasureFragment : Fragment() {
                         Log.d("DEBUG", "평균 페이스(sec) = ${pace.toDouble()}")
 
                         // 소모칼로리: Int
-                        Log.d("DEBUG", "소모 칼로리 = ")
-
-                        // 총 소모 칼로리: Int
-                        Log.d("DEBUG", "총 소모 칼로리 = ")
+                        val cal = getCalories(totalDistance/1000, tick/3600000.0)
+                        Log.d("DEBUG", "소모 칼로리 = $cal")
 
                         // 측정 위치: String
                         Log.d("DEBUG", "측정 위치 = ")
 
                         // 날씨: String
+
+
+//                        Log.d("DEBUG", "날씨 = ${weather!!.icon}")
+
+                        // 온도: Int
+//                        Log.d("DEBUG", "온도 = ${weather!!.temperature}")
+
+                        // 습도: Int
+//                        Log.d("DEBUG", "습도 = ${weather!!.humidity}")
+
+                        // gpx 파일 이름
+                        Log.d("DEBUG", "파일명 = ${gpx!!.getFileName()}")
+
+                        Log.d("DEBUG", "saved")
+                        
+                        binding.timer.base = SystemClock.elapsedRealtime()
+                        binding.action.text = "Start"
+                        binding.paceView.text = "0'00''"
+                        binding.distanceView.text = "0.00"
+                        binding.stop.visibility = View.INVISIBLE
+                        previousLocation = null
+                        totalDistance = 0f
+                        isRecording = false
+                        averagePace = 0.0f
+                        Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
+
                         Log.d("DEBUG", "날씨 = ${weather?.icon}")
 
                         // 온도: Int
@@ -239,6 +280,7 @@ class MeasureFragment : Fragment() {
                                 Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
                             }
                         }
+
                     }
                     .setNegativeButton("삭제") { dialog, which ->
                         binding.timer.base = SystemClock.elapsedRealtime()
@@ -267,23 +309,4 @@ class MeasureFragment : Fragment() {
     override fun onResume() {
         super.onResume()
     }
-
-
-
-//    //칼로리 계산식
-//    private fun calculateCaloriesBurned(gpxData: GPXData, userData: UserData): Double {
-//        val durationHours = gpxData.duration / (1000 * 60 * 60).toDouble()
-//        val speed = gpxData.distance / (gpxData.duration / 1000.0) * 3.6 // km/h
-//
-//        // Simplified METS values based on speed
-//        val mets = when {
-//            speed < 4 -> 2.0
-//            speed < 6 -> 3.0
-//            speed < 8 -> 6.0
-//            else -> 8.0
-//        }
-//
-//        // Calories burned formula
-//        return mets * userData.weight * durationHours
-//    }
 }
