@@ -5,7 +5,10 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
+import android.text.InputType
+import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -38,6 +41,31 @@ class MainActivity : AppCompatActivity() {
 
         // 위치정보 권한 요청
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+
+        // 체중값이 없는 경우 체중 입력 요청
+        getSharedPreferences("PREF", Context.MODE_PRIVATE).also {
+            if(it.getFloat("WEIGHT", -1.0f) == -1.0f) {
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle("체중을 입력하세요")
+
+                val input = EditText(this)
+                input.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+                builder.setView(input)
+
+                builder.setPositiveButton("저장") { dialog, which ->
+                    try {
+                        val weight = input.text.toString().toDouble()
+                        it.edit().putFloat("WEIGHT", weight.toFloat()).apply()
+                        Toast.makeText(this, "저장되었습니다", Toast.LENGTH_SHORT).show()
+                    } catch (e: Exception) {
+                        Toast.makeText(this, "잘못된 입력입니다", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                builder.setNegativeButton("취소") { dialog, which -> dialog.cancel() }
+
+                builder.show()
+            }
+        }
 
         val viewPager: ViewPager2 = findViewById(R.id.viewPager)
         val tabLayout: TabLayout = findViewById(R.id.tabLayout)
