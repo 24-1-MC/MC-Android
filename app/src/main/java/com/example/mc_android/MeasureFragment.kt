@@ -40,6 +40,7 @@ import java.time.format.DateTimeFormatter
 class MeasureFragment : Fragment() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
+    private lateinit var binding: FragmentMeasureBinding
     private var initLocation: Location? = null
     private var previousLocation: Location? = null
     private var previousAltitude: Double? = null
@@ -52,6 +53,7 @@ class MeasureFragment : Fragment() {
     private var time = 0L
     private var tick = 0L
     private var locationTick = 0
+    private var averagePace = 0.0f
     private var gpx: GpxWriter? = null
     private val locationRequest = LocationRequest.create().apply {
         interval = 10000 // 측정 단위 = 10sec
@@ -63,16 +65,14 @@ class MeasureFragment : Fragment() {
     private val isoUtcTimestampFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
         .withZone(ZoneId.of("UTC"))
 
-        override fun onCreateView(
+    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentMeasureBinding.inflate(layoutInflater)
+        binding = FragmentMeasureBinding.inflate(layoutInflater)
         val sharedPreferences = requireContext().getSharedPreferences("PREF", Context.MODE_PRIVATE)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-
-        var averagePace = 0.0f
 
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
@@ -88,7 +88,7 @@ class MeasureFragment : Fragment() {
                     // 첫 위치, 날씨 기록
                     if(initLocation == null) initLocation = location
                     if(weather == null)
-                        // 백그라운드 스레드풀
+                    // 백그라운드 스레드풀
                         CoroutineScope(Dispatchers.Default).launch {
                             weather = getWeather(requireContext(), location.latitude, location.longitude)
                         }
@@ -194,97 +194,62 @@ class MeasureFragment : Fragment() {
         binding.stop.setOnClickListener {
             // 기록이 너무 짧으면 저장하지 않음
             if(isRecording && !isRunning) {
-                if(totalDistance < 10) {
-                    binding.timer.base = SystemClock.elapsedRealtime()
-                    binding.action.text = "Start"
-                    binding.paceView.text = "0'00''"
-                    binding.distanceView.text = "0.00"
-                    binding.stop.visibility = View.INVISIBLE
-                    previousLocation = null
-                    totalDistance = 0f
-                    isRecording = false
-                    averagePace = 0.0f
+                if (totalDistance < 15) {
+                    initScreen()
                     Toast.makeText(context, "저장되지 않았습니다.", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
-
-                val endTime = Instant.now()
-
-                AlertDialog.Builder(requireContext())
-                    .setTitle("기록 완료")
-                    .setPositiveButton("저장") { dialog, which ->
-                        // gpx 기록 종료
-                        gpx!!.finalizeGpx()
-
-                        // 평균 페이스: Double
-                        var pace: Float
-                        if(totalDistance == 0f) pace = 0f // infinity 예외처리
-                        else pace = tick/totalDistance
-                        if(averagePace > 2400) pace = 0f // pace가 너무 길면 0으로 표시
-                        Log.d("DEBUG", "평균 페이스(sec) = ${pace.toDouble()}")
-
-                        // 소모칼로리: Int
-                        val weight = sharedPreferences.getFloat("WEIGHT", -1.0f).toDouble()
-                        val cal = getCalories(totalDistance/1000, weight, tick/3600000.0)
-
-                        val db = MyDataDaoDatabase.getDatabase(requireContext())
-                        val endTimeIsoUtcTimeStamp = isoUtcTimestampFormatter.format(endTime)
-
-                        CoroutineScope(Dispatchers.IO).launch {
-                            db!!.myDataDao().insert(MyData(
-                                startAt = startTimeIsoTimestamp,
-                                endAt = endTimeIsoUtcTimeStamp,
-                                time = (tick/1000).toInt(),
-                                distance = totalDistance.toDouble(),
-                                totalElevation = totalElevation,
-                                avgPace = pace.toDouble(),
-                                weatherIcon = weather!!.icon,
-                                temperature = weather!!.temperature,
-                                humidity = weather!!.humidity,
-                                locationFileName = gpx!!.getFileName()
-                            ))
-
-                            withContext(Dispatchers.Main) {
-                                Log.d("DEBUG", "saved")
-                                binding.timer.base = SystemClock.elapsedRealtime()
-                                binding.action.text = "Start"
-                                binding.paceView.text = "0'00''"
-                                binding.distanceView.text = "0.00"
-                                binding.stop.visibility = View.INVISIBLE
-                                previousLocation = null
-                                totalDistance = 0f
-                                isRecording = false
-                                averagePace = 0.0f
-                                Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-
-                        binding.timer.base = SystemClock.elapsedRealtime()
-                        binding.action.text = "Start"
-                        binding.paceView.text = "0'00''"
-                        binding.distanceView.text = "0.00"
-                        binding.stop.visibility = View.INVISIBLE
-                        previousLocation = null
-                        totalDistance = 0f
-                        isRecording = false
-                        averagePace = 0.0f
-                        Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
-                    }
-                    .setNegativeButton("삭제") { dialog, which ->
-                        binding.timer.base = SystemClock.elapsedRealtime()
-                        binding.action.text = "시작"
-                        binding.paceView.text = "0'00''"
-                        binding.distanceView.text = "0.00"
-                        binding.stop.visibility = View.INVISIBLE
-                        previousLocation = null
-                        totalDistance = 0f
-                        isRecording = false
-                        averagePace = 0.0f
-                        Toast.makeText(context, "삭제 완료", Toast.LENGTH_SHORT).show()
-                    }
-                    .create()
-                    .show()
             }
+
+            val endTime = Instant.now()
+
+            AlertDialog.Builder(requireContext())
+                .setTitle("기록 완료")
+                .setPositiveButton("저장") { dialog, which ->
+                    // gpx 기록 종료
+                    gpx!!.finalizeGpx()
+
+                    // 평균 페이스: Double
+                    var pace: Float
+                    if(totalDistance == 0f) pace = 0f // infinity 예외처리
+                    else pace = tick/totalDistance
+                    if(averagePace > 2400) pace = 0f // pace가 너무 길면 0으로 표시
+
+                    // 소모칼로리: Int
+                    val weight = sharedPreferences.getFloat("WEIGHT", -1.0f).toDouble()
+                    val cal = getCalories(totalDistance/1000, weight, tick/3600000.0)
+
+                    val db = MyDataDaoDatabase.getDatabase(requireContext())
+                    val endTimeIsoUtcTimeStamp = isoUtcTimestampFormatter.format(endTime)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        Log.d("DEBUG", "total distance = ${totalDistance}")
+
+                        db!!.myDataDao().insert(MyData(
+                            startAt = startTimeIsoTimestamp,
+                            endAt = endTimeIsoUtcTimeStamp,
+                            time = (tick/1000).toInt(),
+                            distance = totalDistance.toDouble(),
+                            totalElevation = totalElevation,
+                            avgPace = pace.toDouble(),
+                            weatherIcon = weather!!.icon,
+                            totalKcal = cal.toInt(),
+                            temperature = weather!!.temperature,
+                            humidity = weather!!.humidity,
+                            locationFileName = gpx!!.getFileName()
+                        ))
+
+                        withContext(Dispatchers.Main) {
+                            initScreen()
+                            Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                .setNegativeButton("삭제") { dialog, which ->
+                    initScreen()
+                    Toast.makeText(context, "삭제 완료", Toast.LENGTH_SHORT).show()
+                }
+                .create()
+                .show()
         }
 
         return binding.root
@@ -296,5 +261,17 @@ class MeasureFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+    }
+
+    fun initScreen() {
+        binding.timer.base = SystemClock.elapsedRealtime()
+        binding.action.text = "시작"
+        binding.paceView.text = "0'00''"
+        binding.distanceView.text = "0.00"
+        binding.stop.visibility = View.INVISIBLE
+        previousLocation = null
+        totalDistance = 0f
+        isRecording = false
+        averagePace = 0.0f
     }
 }
