@@ -91,13 +91,20 @@ class MainFragment : Fragment(), MyAdapterMain.OnItemClickListener {
     }
 
     override fun onItemLongClick(position: Int) {
+        val db = MyDataDaoDatabase.getDatabase(requireContext())
+        val selectedItem = adapter?.itemList?.get(position)
         // AlertDialog를 사용하여 삭제 여부 확인
         AlertDialog.Builder(requireContext())
             .setTitle("삭제 확인")
             .setMessage("이 기록을을 삭제하시겠습니까?")
             .setPositiveButton("예") { dialog, which ->
-                adapter?.itemList?.removeAt(position)
-                adapter?.notifyItemRemoved(position)
+                CoroutineScope(Dispatchers.IO).launch {
+                    db!!.myDataDao().deleteById(selectedItem!!.id)
+                    withContext(Dispatchers.Main) {
+                        adapter?.itemList?.removeAt(position)
+                        adapter?.notifyItemRemoved(position)
+                    }
+                }
             }
             .setNegativeButton("아니오", null)
             .show()

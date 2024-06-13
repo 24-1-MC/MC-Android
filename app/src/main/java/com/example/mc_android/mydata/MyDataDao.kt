@@ -12,4 +12,7 @@ interface MyDataDao {
 
     @Query("SELECT * from my_data")
     fun selectAll(): LiveData<List<MyData>>
+
+    @Query("DELETE FROM my_data WHERE id = :id")
+    suspend fun deleteById(id: Int)
 }
