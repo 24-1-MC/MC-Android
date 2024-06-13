@@ -17,6 +17,7 @@ data class MyData(
     @ColumnInfo("total_elevation") val totalElevation: Double,
     @ColumnInfo("avg_face") val avgPace: Double,
     @ColumnInfo("weather_icon") val weatherIcon: String,
+    val totalKcal: Int,
     val temperature: Int,
     val humidity: Int,
     @ColumnInfo("location_file_name") val locationFileName: String,

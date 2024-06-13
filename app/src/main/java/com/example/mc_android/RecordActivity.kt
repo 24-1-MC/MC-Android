@@ -30,9 +30,10 @@ class RecordActivity : AppCompatActivity() {
             binding.dateHistory.text = DateTimeUtils(item.startAt).convertToLocalDate()
             binding.timeHistory.text = "시작: ${DateTimeUtils(item.startAt).convertToLocalTime()}   종료: ${DateTimeUtils(item.endAt).convertToLocalTime()}"
             binding.time.text = String.format("%d:%02d:%02d", item.time/3600, item.time/60, item.time%60)
-            binding.distance.text = String.format("%.2fkm", item.distance)
+            binding.distance.text = String.format("%.2fkm", item.distance / 1000)
             binding.totalElevation.text = "${item.totalElevation.toInt()}m"
             binding.avgPace.text = String.format("%d'%02d''", (item.avgPace/60).toInt(), (item.avgPace%60).toInt())
+            binding.totalKcal.text = String.format("%dkcal", item.totalKcal)
             val resourceId = resources.getIdentifier("weather_ic_${item.weatherIcon}", "drawable", packageName)
             binding.weatherIcon.setImageResource(resourceId)
             binding.weather.text = String.format("온도: %d°\n습도: %d%%", item.temperature, item.humidity)//"온도: ${item.temperature}°C\n습도: ${item.humidity}"
