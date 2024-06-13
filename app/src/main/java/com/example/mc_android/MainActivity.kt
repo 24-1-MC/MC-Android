@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.InputType
+import android.text.TextUtils.replace
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -54,35 +56,30 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val viewPager: ViewPager2 = findViewById(R.id.viewPager)
-        val tabLayout: TabLayout = findViewById(R.id.tabLayout)
-
-        val adapter = object : FragmentStateAdapter(this) {
-            override fun getItemCount(): Int = 3
-
-            override fun createFragment(position: Int): Fragment {
-                return when (position) {
-                    0 -> MainFragment()
-//                    1 -> RecordFragment()
-                    1 -> MeasureFragment()
-                    2 -> ChatbotFragment()
-                    else -> MainFragment()
-                }
+        val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            val fragment: Fragment = when (item.itemId) {
+                R.id.nav_main -> MainFragment()
+                R.id.nav_measure -> MeasureFragment()
+                R.id.nav_chatbot -> ChatbotFragment()
+                else -> MainFragment()
             }
+            replaceFragment(fragment)
+            true
         }
 
-        viewPager.adapter = adapter
+        // Set default selection
+        if (savedInstanceState == null) {
+            bottomNavigationView.selectedItemId = R.id.nav_main
+        }
 
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = when (position) {
-                0 -> "Main"
-//                1 -> "Record"
-                1 -> "Measure"
-                2 -> "Chatbot"
-                else -> "Main"
-            }
-        }.attach()
+    }
 
+    private fun replaceFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.fragmentContainerView, fragment)
+            commit()
+        }
     }
 
     override fun onBackPressed() {

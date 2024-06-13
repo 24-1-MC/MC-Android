@@ -164,7 +164,7 @@ class MeasureFragment : Fragment() {
         binding.stop.setOnClickListener {
             if(isRecording && !isRunning) {
 
-                if(totalDistance < 10) {
+                /*if(totalDistance < 10) {
                     binding.timer.base = SystemClock.elapsedRealtime()
                     binding.action.text = "Start"
                     binding.paceView.text = "0'00''"
@@ -176,7 +176,7 @@ class MeasureFragment : Fragment() {
                     averagePace = 0.0f
                     Toast.makeText(context, "저장되지 않았습니다.", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
-                }
+                }*/
 
 
                 val endTime = Instant.now()

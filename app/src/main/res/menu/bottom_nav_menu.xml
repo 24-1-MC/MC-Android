@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_main"
+        android:icon="@drawable/home_icon"
+        android:title="Main" />
+    <item
+        android:id="@+id/nav_measure"
+        android:icon="@drawable/podiatry_icon"
+        android:title="Measure" />
+    <item
+        android:id="@+id/nav_chatbot"
+        android:icon="@drawable/chat_bubble"
+        android:title="Chatbot" />
+</menu>
