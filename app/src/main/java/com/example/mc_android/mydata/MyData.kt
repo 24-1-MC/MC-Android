@@ -1,9 +1,12 @@
 package com.example.mc_android.mydata
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 @Entity(tableName = "my_data")
 data class MyData(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
@@ -17,4 +20,4 @@ data class MyData(
     val temperature: Int,
     val humidity: Int,
     @ColumnInfo("location_file_name") val locationFileName: String,
-)
+) : Parcelable

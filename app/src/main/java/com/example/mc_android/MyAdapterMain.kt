@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mc_android.databinding.ListItemMainBinding
 import com.example.mc_android.mydata.MyData
-import com.example.mc_android.services.DateTimeUtils.convertToLocalDate
+import com.example.mc_android.services.DateTimeUtils
 
 class MyAdapterMain(val itemList: MutableList<MyData>, private val itemClickListener: OnItemClickListener) :
     RecyclerView.Adapter<MyAdapterMain.ViewHolder>() {
@@ -24,7 +24,7 @@ class MyAdapterMain(val itemList: MutableList<MyData>, private val itemClickList
         }
 
         fun bind(myData: MyData) {
-            binding.itemText.text = convertToLocalDate(myData.startAt)
+            binding.itemText.text = DateTimeUtils(myData.startAt).convertToLocalDate()
         }
 
         override fun onClick(v: View?) {

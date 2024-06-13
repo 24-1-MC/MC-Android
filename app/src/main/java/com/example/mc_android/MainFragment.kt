@@ -81,8 +81,13 @@ class MainFragment : Fragment(), MyAdapterMain.OnItemClickListener {
     }
 
     override fun onItemClick(position: Int) {
-        val intent = Intent(requireContext(), RecordActivity::class.java)
-        startActivity(intent)
+        val selectedItem = adapter?.itemList?.get(position)
+
+        selectedItem?.let {
+            val intent = Intent(requireContext(), RecordActivity::class.java)
+            intent.putExtra("selectedItem", it)
+            startActivity(intent)
+        }
     }
 
     override fun onItemLongClick(position: Int) {
