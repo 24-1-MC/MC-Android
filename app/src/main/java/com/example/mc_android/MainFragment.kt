@@ -7,12 +7,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mc_android.databinding.FragmentMainBinding
+import com.example.mc_android.mydata.MyDataDaoDatabase
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.DayViewFacade
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainFragment : Fragment(), MyAdapterMain.OnItemClickListener {
 
@@ -39,8 +46,12 @@ class MainFragment : Fragment(), MyAdapterMain.OnItemClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
-        adapter = MyAdapterMain(getSampleData().toMutableList(), this)
-        binding.recyclerView.adapter = adapter
+        val db = MyDataDaoDatabase.getDatabase(requireContext())
+
+        db?.myDataDao()?.selectAll()?.observe(viewLifecycleOwner, Observer { myDataList ->
+            adapter = MyAdapterMain(myDataList.toMutableList(), this)
+            binding.recyclerView.adapter = adapter
+        })
 
         setupCalendarView()
     }
