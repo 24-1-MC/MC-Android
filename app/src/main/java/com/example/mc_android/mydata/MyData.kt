@@ -15,7 +15,7 @@ data class MyData(
     val time: Int,
     val distance: Double,
     @ColumnInfo("total_elevation") val totalElevation: Double,
-    @ColumnInfo("avg_face") val avgFace: Double,
+    @ColumnInfo("avg_face") val avgPace: Double,
     @ColumnInfo("weather_icon") val weatherIcon: String,
     val temperature: Int,
     val humidity: Int,
