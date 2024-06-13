@@ -24,7 +24,8 @@ class MyAdapterMain(val itemList: MutableList<MyData>, private val itemClickList
         }
 
         fun bind(myData: MyData) {
-            binding.itemText.text = DateTimeUtils(myData.startAt).convertToLocalDate()
+            binding.itemDate.text = DateTimeUtils(myData.startAt).convertToLocalDate()
+            binding.itemDistance.text = String.format("%.2fkm", myData.distance / 1000)
         }
 
         override fun onClick(v: View?) {

@@ -13,20 +13,19 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <TextView
+            android:id="@+id/item_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:padding="8dp"
-            android:gravity="center_vertical"
-            android:textStyle="bold"
-            android:text="날짜" />
+            android:paddingLeft="16dp"
+            android:paddingTop="4dp"/>
         <TextView
-            android:id="@+id/item_text"
+            android:id="@+id/item_distance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:paddingLeft="8dp"
-            android:gravity="center_vertical"
-            android:text="거리" />
+            android:textSize="22sp"
+            android:paddingLeft="16dp"
+            android:paddingBottom="4dp"
+            android:textStyle="bold"/>
     </LinearLayout>
 </LinearLayout>
