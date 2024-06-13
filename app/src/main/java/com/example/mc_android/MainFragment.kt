@@ -98,6 +98,7 @@ class MainFragment : Fragment(), MyAdapterMain.OnItemClickListener {
             .setTitle("삭제 확인")
             .setMessage("이 기록을을 삭제하시겠습니까?")
             .setPositiveButton("예") { dialog, which ->
+                // 데이터 베이스 삭제 코드
                 CoroutineScope(Dispatchers.IO).launch {
                     db!!.myDataDao().deleteById(selectedItem!!.id)
                     withContext(Dispatchers.Main) {
