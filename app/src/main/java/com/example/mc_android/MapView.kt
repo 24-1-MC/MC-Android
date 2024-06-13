@@ -13,19 +13,15 @@ import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
 
 class MapView: AppCompatActivity() {
-    private var gpxFile: GpxReader? = null
+//    private var gpxFile: GpxReader? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = MapViewBinding.inflate(layoutInflater)
         Configuration.getInstance().load(this, getSharedPreferences("osmdroid", MODE_PRIVATE))
         setContentView(binding.root)
-//        인텐트 작성
-//        intent.getIntExtra("fileName", 0).toString().also {
-//            if(it != "0") {
-//                gpxFile = GpxReader(applicationContext, it)
-//            }
-//        }
-        gpxFile = GpxReader(applicationContext, "20240612_025554.gpx")
+        val fileName = intent.getStringExtra("fileName")
+        val gpxFile = GpxReader(applicationContext, fileName!!)
+
         var startPoint: GeoPoint
         var finishPoint: GeoPoint
         var maxLatitude: Double
