@@ -10,8 +10,8 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = "my_data")
 data class MyData(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val startAt: String,
-    val endAt: String,
+    @ColumnInfo("start_at") val startAt: String,
+    @ColumnInfo("end_at") val endAt: String,
     val time: Int,
     val distance: Double,
     @ColumnInfo("total_elevation") val totalElevation: Double,
