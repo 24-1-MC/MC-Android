@@ -25,6 +25,7 @@ import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
     private var backPressedTime: Long = 0 // 뒤로 가기 버튼이 눌린 시간을 기록할 변수
+    private lateinit var measureFragment: MeasureFragment // measure fragment의 변수 가져오기위함
 
     override fun attachBaseContext(newBase: Context) {
         val locale = Locale("ko")
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        measureFragment = MeasureFragment()
 
         // 위치정보 권한 요청
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
@@ -69,12 +71,19 @@ class MainActivity : AppCompatActivity() {
 
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
         bottomNavigationView.setOnItemSelectedListener { item ->
+            // 측정중 다른 탭을 클릭할 경우 예외 처리
+            if (measureFragment.isRecording) {
+                Toast.makeText(this, "측정 중에는 다른 화면으로 이동할 수 없습니다.", Toast.LENGTH_SHORT).show()
+                return@setOnItemSelectedListener false
+            }
+
             val fragment: Fragment = when (item.itemId) {
                 R.id.nav_main -> MainFragment()
-                R.id.nav_measure -> MeasureFragment()
+                R.id.nav_measure -> measureFragment
                 R.id.nav_chatbot -> ChatbotFragment()
                 else -> MainFragment()
             }
+
             replaceFragment(fragment)
             true
         }
